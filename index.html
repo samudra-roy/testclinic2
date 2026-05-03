@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!--
+╔══════════════════════════════════════════════════════╗
+║           CLINIC CONFIG — CHANGE THIS SECTION        ║
+║        for every new dentist. Nothing else needed.   ║
+╚══════════════════════════════════════════════════════╝
+
+DOCTOR_NAME         : Full name shown on page
+CLINIC_NAME         : Clinic name shown on page
+AREA                : Area e.g. Electronic City
+CITY                : City e.g. Bangalore
+PHONE               : Phone number (for schema only)
+RATING              : Google star rating e.g. 5
+REVIEW_COUNT        : Total Google review count
+CONSULTATION_PRICE  : Discounted price e.g. 399
+ORIGINAL_PRICE      : Original price e.g. 700
+GOOGLE_MAPS_URL     : Short share URL from Google Maps
+GOOGLE_MAPS_EMBED   : Full iframe src from Google Maps embed
+GOOGLE_REVIEWS_URL  : Same as GOOGLE_MAPS_URL
+CANONICAL_URL       : Your subdomain URL
+APPS_SCRIPT_URL     : Google Apps Script Web App URL
+DOCTOR_PHOTO        : Path to doctor photo e.g. doctor.jpg
+                      (leave as "" if no photo yet)
+HOURS               : Opening hours e.g. Mon–Sat · 9am to 8pm
+-->
+
+<script>
+const CLINIC = {
+  DOCTOR_NAME:        "Dr. Anindita",
+  CLINIC_NAME:        "Dr. Anindita's Dentalyst Dental Studio",
+  AREA:               "Electronic City",
+  CITY:               "Bangalore",
+  PHONE:              "+919902312465",
+  RATING:             "5",
+  REVIEW_COUNT:       "126",
+  CONSULTATION_PRICE: "399",
+  ORIGINAL_PRICE:     "700",
+  HOURS:              "Mon – Sat · 9am to 8pm",
+  GOOGLE_MAPS_URL:    "https://maps.app.goo.gl/S7Dc958UMVV68Je87",
+  GOOGLE_MAPS_EMBED:  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.9559296228067!2d77.6477132!3d12.846123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6baaec5875cf%3A0xe07f4753e6eff1a2!2sDr%20Aninditas%20Dentalyst%20Dental%20Studio!5e0!3m2!1sen!2sin!4v1777802421885!5m2!1sen!2sin",
+  CANONICAL_URL:      "https://dranindita.flipkarthealth.in",
+  APPS_SCRIPT_URL:    "YOUR_APPS_SCRIPT_WEBAPP_URL_HERE",
+  DOCTOR_PHOTO:       ""
+};
+</script>
+
+<!-- SEO meta tags — auto-filled from CLINIC config above -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // Page title
+  document.title = "Dentist in " + CLINIC.AREA + " " + CLINIC.CITY + " · " + CLINIC.CLINIC_NAME;
+
+  // Meta tags
+  const metas = {
+    "description": "Painless dental care in " + CLINIC.AREA + ", " + CLINIC.CITY + ". Book a consultation with " + CLINIC.DOCTOR_NAME + " — same day appointments, transparent pricing, " + CLINIC.RATING + "★ rated on Google. ₹" + CLINIC.CONSULTATION_PRICE + " only.",
+    "keywords": "dentist " + CLINIC.AREA.toLowerCase() + " " + CLINIC.CITY.toLowerCase() + ", dental clinic " + CLINIC.AREA.toLowerCase() + ", painless dentist " + CLINIC.CITY.toLowerCase() + ", same day dental appointment " + CLINIC.CITY.toLowerCase(),
+  };
+  Object.entries(metas).forEach(([name, content]) => {
+    let el = document.querySelector('meta[name="' + name + '"]');
+    if (el) el.setAttribute('content', content);
+  });
+
+  // Doctor photo
+  if (CLINIC.DOCTOR_PHOTO) {
+    const placeholder = document.querySelector('.doc-placeholder');
+    const mobileAvatar = document.querySelector('.mh-avatar');
+    if (placeholder) placeholder.outerHTML = '<img src="' + CLINIC.DOCTOR_PHOTO + '" alt="' + CLINIC.DOCTOR_NAME + ' — Dentist in ' + CLINIC.AREA + ' ' + CLINIC.CITY + '" class="doc-img">';
+    if (mobileAvatar) mobileAvatar.innerHTML = '<img src="' + CLINIC.DOCTOR_PHOTO + '" alt="' + CLINIC.DOCTOR_NAME + '">';
+  }
+
+  // Map embed
+  const mapFrame = document.getElementById('clinic-map');
+  if (mapFrame) mapFrame.src = CLINIC.GOOGLE_MAPS_EMBED;
+
+  // Google reviews link
+  const reviewLinks = document.querySelectorAll('.google-reviews-link');
+  reviewLinks.forEach(el => el.href = CLINIC.GOOGLE_MAPS_URL);
+
+  // Directions link
+  const dirLinks = document.querySelectorAll('.directions-link');
+  dirLinks.forEach(el => el.href = CLINIC.GOOGLE_MAPS_URL);
+
+  // Dynamic text replacements
+  const replacements = {
+    '.clinic-name':        CLINIC.CLINIC_NAME,
+    '.doctor-name':        CLINIC.DOCTOR_NAME,
+    '.clinic-area':        CLINIC.AREA,
+    '.clinic-city':        CLINIC.CITY,
+    '.clinic-area-city':   CLINIC.AREA + ", " + CLINIC.CITY,
+    '.clinic-hours':       CLINIC.HOURS,
+    '.review-count':       CLINIC.REVIEW_COUNT + "+",
+    '.review-count-plain': CLINIC.REVIEW_COUNT,
+    '.clinic-rating':      CLINIC.RATING + "★",
+    '.price-curr':         "₹" + CLINIC.CONSULTATION_PRICE,
+    '.price-orig':         "₹" + CLINIC.ORIGINAL_PRICE,
+    '.price-save-amount':  "₹" + (CLINIC.ORIGINAL_PRICE - CLINIC.CONSULTATION_PRICE),
+  };
+  Object.entries(replacements).forEach(([sel, val]) => {
+    document.querySelectorAll(sel).forEach(el => el.textContent = val);
+  });
+
+});
+</script>
+
+<!-- Local Business Schema — auto from config -->
+<script type="application/ld+json" id="schema-org">
+{
+  "@context": "https://schema.org",
+  "@type": "Dentist",
+  "name": "Dr. Anindita's Dentalyst Dental Studio",
+  "description": "Painless dental care in Electronic City, Bangalore.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Electronic City",
+    "addressLocality": "Bangalore",
+    "addressRegion": "Karnataka",
+    "addressCountry": "IN"
+  },
+  "telephone": "+919902312465",
+  "openingHours": "Mo-Sa 09:00-20:00",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "reviewCount": "126"
+  },
+  "priceRange": "₹399",
+  "medicalSpecialty": "Dentistry"
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:   #FAF7F2;
+  --warm:    #F5EFE6;
+  --teal:    #1A6B6B;
+  --teal-lt: #E8F4F4;
+  --teal-md: #2A8A8A;
+  --gold:    #C4973A;
+  --gold-lt: #FDF6E8;
+  --dark:    #1C2B2B;
+  --gray:    #6B7B7B;
+  --light:   #A8B8B8;
+  --white:   #FFFFFF;
+  --green:   #276749;
+  --green-lt:#F0FFF4;
+  --shadow:  0 4px 32px rgba(26,107,107,0.10);
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
+
+/* ── TOP BAR ─────────────────────────────────────────────────────── */
+.top-bar {
+  background: var(--dark);
+  padding: 9px 20px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.top-live {
+  display: flex; align-items: center; gap: 6px;
+  color: #68D391; font-weight: 600; font-size: 12px;
+}
+.top-dot { width: 6px; height: 6px; background: #68D391; border-radius: 50%; animation: blink 2s ease infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.top-divider { color: rgba(255,255,255,0.2); }
+.top-bar a { color: rgba(255,255,255,0.75); text-decoration: none; }
+.top-bar a:hover { color: var(--white); }
+
+/* ── MOBILE HEADER ───────────────────────────────────────────────── */
+.mobile-header {
+  display: none;
+  background: linear-gradient(135deg, var(--teal), #0D4545);
+  padding: 22px 20px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.mobile-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 100% at 80% 50%, rgba(196,151,58,0.1) 0%, transparent 70%);
+}
+.mh-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; }
+.mh-avatar {
+  width: 76px; height: 76px; border-radius: 18px;
+  background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 38px; flex-shrink: 0; overflow: hidden;
+}
+.mh-avatar img { width:100%; height:100%; object-fit:cover; object-position:top; }
+.mh-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 3px; }
+.mh-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--white); line-height: 1.2; margin-bottom: 10px; }
+.mh-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.mh-pill { background: rgba(255,255,255,0.11); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.88); font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 100px; }
+
+/* ── DESKTOP HERO ────────────────────────────────────────────────── */
+.hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+
+.hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 52px 48px 52px 56px;
+  background: var(--cream); position: relative; z-index: 2;
+}
+
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--teal-lt); color: var(--teal);
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 100px;
+  margin-bottom: 22px; width: fit-content;
+  animation: fadeUp 0.6s ease both;
+}
+.badge-dot { width:6px; height:6px; background:var(--teal); border-radius:50%; animation:pulse 2s ease infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 3.2vw, 50px);
+  font-weight: 700; line-height: 1.15;
+  color: var(--dark); margin-bottom: 16px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+
+/* The emotional hook word */
+.hero-title .hook {
+  color: var(--teal);
+  position: relative; display: inline-block;
+}
+.hero-title .hook::after {
+  content: '';
+  position: absolute; bottom: 2px; left: 0; right: 0; height: 3px;
+  background: var(--gold); border-radius: 2px;
+  transform: scaleX(0); transform-origin: left;
+  animation: lineIn 0.8s 0.9s ease forwards;
+}
+@keyframes lineIn { to { transform: scaleX(1); } }
+
+.hero-sub {
+  font-size: 15.5px; color: var(--gray); line-height: 1.72;
+  margin-bottom: 6px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-sub strong { color: var(--dark); font-weight: 600; }
+
+/* Gentle urgency nudge */
+.nudge {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--gray);
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s 0.25s ease both;
+}
+.nudge-dot { width: 6px; height: 6px; background: #68D391; border-radius: 50%; flex-shrink: 0; animation: blink 2s ease infinite; }
+.nudge strong { color: var(--dark); font-weight: 600; }
+
+.trust-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 26px;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.tpill {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--white); border: 1.5px solid rgba(26,107,107,0.12);
+  padding: 7px 14px; border-radius: 100px;
+  font-size: 12.5px; font-weight: 500; color: var(--dark);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+/* ── FORM CARD ───────────────────────────────────────────────────── */
+.form-card {
+  background: var(--white); border-radius: 24px;
+  box-shadow: var(--shadow); border: 1px solid rgba(26,107,107,0.08);
+  overflow: hidden; animation: fadeUp 0.6s 0.4s ease both;
+}
+
+.form-top {
+  background: linear-gradient(135deg, var(--teal) 0%, #0D4545 100%);
+  padding: 22px 28px 20px; position: relative; overflow: hidden;
+}
+.form-top::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 100% 120% at 110% 50%, rgba(196,151,58,0.13) 0%, transparent 60%);
+}
+.form-top-inner { position: relative; z-index: 1; }
+.form-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+.form-subtitle { font-size: 12.5px; color: rgba(255,255,255,0.6); margin-bottom: 14px; }
+
+/* ── PRICE — appears ONCE and ONLY here ─── */
+.price-row {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  padding: 8px 14px; border-radius: 12px;
+}
+.price-orig { font-size: 14px; color: rgba(255,255,255,0.4); text-decoration: line-through; }
+.price-curr { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: #FBD38D; line-height: 1; }
+.price-save { font-size: 11px; font-weight: 700; background: rgba(104,211,145,0.2); color: #68D391; border: 1px solid rgba(104,211,145,0.3); padding: 2px 8px; border-radius: 100px; }
+.price-note { font-size: 11.5px; color: rgba(255,255,255,0.5); margin-top: 6px; }
+
+.form-body { padding: 22px 28px; }
+
+/* Recent booking social proof */
+.recent-proof {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--green-lt); border: 1px solid rgba(39,103,73,0.15);
+  border-radius: 10px; padding: 9px 13px;
+  margin-bottom: 16px; font-size: 12.5px; color: var(--green);
+  font-weight: 500;
+}
+.recent-icon { font-size: 14px; flex-shrink: 0; }
+
+/* Patient proof bar */
+.proof-bar {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--gold-lt); border: 1px solid rgba(196,151,58,0.18);
+  border-radius: 10px; padding: 9px 13px;
+  margin-bottom: 16px; font-size: 12.5px; color: var(--dark); line-height: 1.4;
+}
+.pb-avs { display: flex; flex-shrink: 0; }
+.pb-av {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 2px solid var(--white); background: var(--teal-lt);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: var(--teal);
+  margin-right: -6px;
+}
+
+.fg { margin-bottom: 13px; }
+.fg label { display: block; font-size: 12.5px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+.fg input, .fg textarea, .fg select {
+  width: 100%; padding: 12px 15px;
+  border: 1.5px solid rgba(26,107,107,0.14);
+  border-radius: 11px; font-family: 'DM Sans', sans-serif;
+  font-size: 15px; color: var(--dark); background: var(--cream);
+  transition: all 0.2s; outline: none; -webkit-appearance: none; appearance: none;
+}
+.fg select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7B7B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; cursor: pointer;
+}
+.fg textarea { resize: none; height: 80px; line-height: 1.5; }
+.fg input:focus, .fg textarea:focus, .fg select:focus {
+  border-color: var(--teal); background: var(--white); box-shadow: 0 0 0 4px rgba(26,107,107,0.08);
+}
+.fg input::placeholder, .fg textarea::placeholder { color: var(--light); }
+
+.submit-btn {
+  width: 100%; padding: 15px 20px;
+  background: var(--teal); color: var(--white);
+  border: none; border-radius: 12px;
+  font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+  cursor: pointer; transition: all 0.25s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-top: 4px; position: relative; overflow: hidden;
+}
+.submit-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.08),transparent); }
+.submit-btn:hover { background: var(--teal-md); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,107,107,0.3); }
+.submit-btn:active { transform: translateY(0); }
+.btn-arrow { transition: transform 0.2s; }
+.submit-btn:hover .btn-arrow { transform: translateX(4px); }
+
+.form-note { text-align: center; font-size: 12px; color: var(--light); margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+/* ── HERO RIGHT ──────────────────────────────────────────────────── */
+.hero-right {
+  position: relative;
+  background: linear-gradient(160deg, var(--teal) 0%, #0D4545 100%);
+  overflow: hidden;
+}
+.hero-right::before {
+  content:''; position:absolute; inset:0; z-index:1;
+  background: radial-gradient(ellipse 70% 50% at 30% 20%, rgba(196,151,58,0.14) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 70% at 80% 80%, rgba(255,255,255,0.04) 0%, transparent 50%);
+}
+.deco { position:absolute; border-radius:50%; border:1px solid rgba(255,255,255,0.06); z-index:1; }
+.d1 { width:440px; height:440px; top:-120px; right:-90px; }
+.d2 { width:640px; height:640px; bottom:-220px; left:-180px; }
+.doc-wrap { position:absolute; inset:0; z-index:2; }
+.doc-img { width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+.doc-placeholder {
+  width:100%; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color:rgba(255,255,255,0.25); font-size:13px; text-align:center; gap:14px;
+}
+.ph-icon { font-size:96px; opacity:0.4; }
+.hero-right::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:54%;
+  background: linear-gradient(to top, rgba(13,69,69,0.97) 0%, rgba(13,69,69,0.58) 46%, transparent 100%);
+  z-index:3;
+}
+.info-cards { position:absolute; bottom:32px; left:28px; right:28px; z-index:4; display:flex; flex-direction:column; gap:10px; }
+.ic {
+  background:rgba(255,255,255,0.09); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.12); border-radius:14px;
+  padding:13px 17px; display:flex; align-items:center; gap:13px;
+  animation: slideIn 0.6s ease both;
+}
+.ic:nth-child(1){animation-delay:0.5s} .ic:nth-child(2){animation-delay:0.65s} .ic:nth-child(3){animation-delay:0.8s}
+@keyframes slideIn { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
+.ic-ico { width:38px; height:38px; background:rgba(255,255,255,0.12); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.ic-lbl { font-size:10px; color:rgba(255,255,255,0.5); font-weight:600; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:2px; }
+.ic-val { font-size:13.5px; color:var(--white); font-weight:600; }
+
+/* ── PROOF STRIP ─────────────────────────────────────────────────── */
+.proof-strip {
+  background: var(--white);
+  border-top: 1px solid rgba(26,107,107,0.07); border-bottom: 1px solid rgba(26,107,107,0.07);
+  padding: 24px 56px; display: flex; align-items: center; justify-content: space-around; gap: 20px;
+}
+.pi { display:flex; flex-direction:column; align-items:center; text-align:center; gap:3px; }
+.pn { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--teal); line-height:1; }
+.pl { font-size:12px; color:var(--gray); }
+.pdiv { width:1px; height:32px; background:rgba(26,107,107,0.1); }
+
+/* ── PAIN POINT SECTION ──────────────────────────────────────────── */
+.pain-section {
+  padding: 76px 56px;
+  background: var(--dark);
+  position: relative; overflow: hidden;
+}
+.pain-section::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(26,107,107,0.2) 0%, transparent 70%);
+}
+.pain-inner { position:relative; z-index:1; max-width:860px; margin:0 auto; }
+.pain-label { font-size:11.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; text-align:center; }
+.pain-title { font-family:'Playfair Display',serif; font-size:clamp(22px,3vw,34px); font-weight:700; color:var(--white); margin-bottom:14px; line-height:1.25; text-align:center; }
+.pain-sub { font-size:15px; color:rgba(255,255,255,0.55); line-height:1.75; margin-bottom:44px; text-align:center; max-width:600px; margin-left:auto; margin-right:auto; }
+.pain-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:44px; }
+.pc {
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px; padding:24px 20px;
+}
+.pc-icon { font-size:26px; margin-bottom:12px; }
+.pc-title { font-size:14.5px; font-weight:600; color:var(--white); margin-bottom:7px; }
+.pc-text { font-size:13px; color:rgba(255,255,255,0.5); line-height:1.65; }
+
+/* Solution bridge */
+.solution-bridge {
+  background: rgba(26,107,107,0.3);
+  border: 1px solid rgba(26,107,107,0.4);
+  border-radius: 16px; padding: 24px 28px;
+  display: flex; align-items: center; gap: 20px;
+}
+.sb-icon { font-size: 36px; flex-shrink: 0; }
+.sb-text { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.6; }
+.sb-text strong { color: var(--white); }
+
+/* ── REASSURANCE ─────────────────────────────────────────────────── */
+.reassure-section { padding: 76px 56px; }
+.section-lbl { font-size:11.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; text-align:center; }
+.section-ttl { font-family:'Playfair Display',serif; font-size:clamp(22px,3vw,34px); font-weight:700; color:var(--dark); text-align:center; margin-bottom:12px; line-height:1.25; }
+.section-sub { font-size:15px; color:var(--gray); text-align:center; max-width:540px; margin:0 auto 44px; line-height:1.7; }
+.reassure-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; max-width:940px; margin:0 auto; }
+.rcard {
+  background:var(--white); border-radius:20px; padding:28px 24px;
+  border:1px solid rgba(26,107,107,0.08); transition:all 0.3s; position:relative; overflow:hidden;
+}
+.rcard::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--teal),var(--gold)); transform:scaleX(0); transition:transform 0.3s; transform-origin:left; }
+.rcard:hover { transform:translateY(-4px); box-shadow:var(--shadow); }
+.rcard:hover::after { transform:scaleX(1); }
+.ri { width:48px; height:48px; background:var(--teal-lt); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:18px; }
+.rt2 { font-size:15.5px; font-weight:600; color:var(--dark); margin-bottom:8px; }
+.rd2 { font-size:13.5px; color:var(--gray); line-height:1.65; }
+
+/* ── MAP SECTION ─────────────────────────────────────────────────── */
+.map-section { padding:76px 56px; background:var(--cream); }
+.map-inner { max-width:940px; margin:0 auto; }
+.map-wrap {
+  border-radius:20px; overflow:hidden;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(26,107,107,0.08);
+  position:relative;
+}
+.map-wrap iframe { display:block; width:100%; height:400px; border:0; }
+.map-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 20px;
+  background:var(--white);
+  flex-wrap:wrap; gap:12px;
+}
+.map-address { font-size:14px; color:var(--dark); font-weight:500; display:flex; align-items:center; gap:8px; }
+.map-links { display:flex; gap:12px; }
+.map-link {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:13px; font-weight:600; color:var(--teal);
+  text-decoration:none; padding:7px 14px;
+  border:1.5px solid rgba(26,107,107,0.2);
+  border-radius:100px; transition:all 0.2s;
+}
+.map-link:hover { background:var(--teal-lt); }
+
+/* ── REVIEWS ─────────────────────────────────────────────────────── */
+.reviews-section { padding:76px 56px; background:var(--warm); }
+.reviews-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; max-width:940px; margin:0 auto; }
+.rc { background:var(--white); border-radius:18px; padding:26px; border:1px solid rgba(26,107,107,0.06); position:relative; }
+.rc::before { content:'"'; position:absolute; top:14px; right:18px; font-family:'Playfair Display',serif; font-size:58px; color:var(--teal-lt); line-height:1; }
+.stars { color:var(--gold); font-size:14px; margin-bottom:12px; letter-spacing:2px; }
+.rv-text { font-size:13.5px; color:var(--gray); line-height:1.7; margin-bottom:16px; font-style:italic; }
+.rv-author { display:flex; align-items:center; gap:10px; }
+.rv-av { width:34px; height:34px; background:var(--teal-lt); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--teal); flex-shrink:0; }
+.rv-name { font-size:13px; font-weight:600; color:var(--dark); }
+.rv-detail { font-size:11px; color:var(--light); }
+
+/* ── FAQ ─────────────────────────────────────────────────────────── */
+.faq-section { padding:76px 56px; }
+.faq-wrap { max-width:660px; margin:0 auto; }
+.faq-item { border:1.5px solid rgba(26,107,107,0.1); border-radius:14px; margin-bottom:10px; overflow:hidden; background:var(--white); }
+.faq-q { width:100%; padding:17px 22px; background:none; border:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:12px; font-family:'DM Sans',sans-serif; font-size:14.5px; font-weight:600; color:var(--dark); text-align:left; transition:background 0.2s; }
+.faq-q:hover { background:var(--teal-lt); }
+.faq-chev { font-size:11px; color:var(--teal); transition:transform 0.3s; flex-shrink:0; }
+.faq-item.open .faq-chev { transform:rotate(180deg); }
+.faq-ans { max-height:0; overflow:hidden; transition:max-height 0.35s ease, padding 0.35s ease; font-size:13.5px; color:var(--gray); line-height:1.75; padding:0 22px; }
+.faq-item.open .faq-ans { max-height:220px; padding:0 22px 18px; }
+
+/* ── BOTTOM CTA ──────────────────────────────────────────────────── */
+.bottom-cta { background:linear-gradient(160deg,var(--teal) 0%,#0D4545 100%); padding:76px 56px; text-align:center; position:relative; overflow:hidden; }
+.bottom-cta::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 50% 50%, rgba(196,151,58,0.1) 0%, transparent 70%); }
+.bc-ttl { font-family:'Playfair Display',serif; font-size:clamp(24px,3.5vw,40px); font-weight:700; color:var(--white); margin-bottom:12px; position:relative; z-index:1; line-height:1.2; }
+.bc-sub { font-size:15px; color:rgba(255,255,255,0.65); margin-bottom:32px; position:relative; z-index:1; line-height:1.6; }
+.cta-btn { display:inline-flex; align-items:center; gap:9px; background:var(--white); color:var(--teal); padding:15px 32px; border-radius:100px; font-size:15px; font-weight:700; text-decoration:none; transition:all 0.25s; position:relative; z-index:1; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
+.cta-btn:hover { transform:translateY(-3px); box-shadow:0 16px 48px rgba(0,0,0,0.3); }
+
+/* ── FOOTER ──────────────────────────────────────────────────────── */
+footer { background:var(--dark); padding:26px 56px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.fn { font-family:'Playfair Display',serif; font-size:16px; color:var(--white); font-weight:600; }
+.fi { font-size:12px; color:rgba(255,255,255,0.4); }
+.fc { display:flex; gap:16px; }
+.fc a { font-size:12.5px; color:rgba(255,255,255,0.55); text-decoration:none; transition:color 0.2s; display:flex; align-items:center; gap:5px; }
+.fc a:hover { color:var(--white); }
+
+/* ── SUCCESS ─────────────────────────────────────────────────────── */
+.success-state { display:none; flex-direction:column; align-items:center; text-align:center; padding:44px 24px; gap:14px; }
+.s-icon { width:68px; height:68px; background:var(--teal-lt); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px; animation:pop 0.4s ease both; }
+@keyframes pop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+.s-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--dark); }
+.s-sub { font-size:14px; color:var(--gray); line-height:1.65; max-width:280px; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── MOBILE ──────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .top-bar { display: none; }
+  .mobile-header { display: block; }
+  .hero-right { display: none; }
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-left { padding: 24px 18px 36px; }
+  .badge { display: none; }
+  .hero-title { font-size: 26px; margin-bottom: 12px; }
+  .hero-sub { font-size: 14px; margin-bottom: 8px; }
+  .nudge { margin-bottom: 18px; }
+  .trust-row { margin-bottom: 18px; }
+  .tpill { font-size: 12px; padding: 6px 12px; }
+  .form-top { padding: 18px 20px; }
+  .form-body { padding: 18px 18px; }
+  .form-title { font-size: 18px; }
+  .fg input, .fg textarea, .fg select { font-size: 16px; }
+  .proof-strip { padding: 18px 12px; gap: 0; justify-content: space-around; }
+  .pdiv { display: none; }
+  .pn { font-size: 22px; }
+  .pl { font-size: 10.5px; }
+  .map-section { padding: 48px 18px; }
+  .map-wrap iframe { height: 280px; }
+  .map-footer { flex-direction: column; align-items: flex-start; }
+  .pain-section, .reassure-section, .reviews-section, .faq-section, .bottom-cta { padding: 48px 18px; }
+  .pain-grid, .reassure-grid, .reviews-grid { grid-template-columns: 1fr; }
+  .solution-bridge { flex-direction: column; text-align: center; }
+  .section-ttl, .pain-title { font-size: 22px; }
+  .section-sub, .pain-sub { font-size: 14px; }
+  footer { padding: 20px 18px; flex-direction: column; text-align: center; }
+  .fc { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <span class="top-live">
+    <span class="top-dot"></span>
+    Accepting new patients
+  </span>
+  <span class="top-divider">·</span>
+  <span>⭐ <span class="review-count-plain">126</span> reviews on Google · Rated <span class="clinic-rating">5★</span></span>
+  <span class="top-divider">·</span>
+  <span class="clinic-area-city">Electronic City, Bangalore</span>
+</div>
+
+<!-- MOBILE HEADER -->
+<div class="mobile-header">
+  <div class="mh-inner">
+    <div class="mh-avatar">
+      <!-- Replace: <img src="doctor.jpg" alt="Dr. Anindita"> -->
+      👩‍⚕️
+    </div>
+    <div>
+      <div class="mh-badge">Electronic City, Bangalore</div>
+      <div class="mh-name">Dr. Anindita's Dentalyst Dental Studio</div>
+      <div class="mh-pills">
+        <span class="mh-pill">😌 Painless</span>
+        <span class="mh-pill">⭐ 5★ rated</span>
+        <span class="mh-pill">⚡ Same day</span>
+        <span class="mh-pill">💬 No pressure</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+
+    <div class="badge">
+      <span class="badge-dot"></span>
+      <span>Electronic City, Bangalore</span>
+    </div>
+
+    <h1 class="hero-title">
+      Finally, a dentist visit<br>
+      you <span class="hook">won't dread</span>
+    </h1>
+
+    <p class="hero-sub">
+      Most people put off dental visits for months — not because they don't care,
+      but because it feels like a big deal.
+      <strong>Dr. Anindita makes it genuinely easy</strong> —
+      gentle treatment, zero judgment, clear costs before anything begins.
+    </p>
+
+    <div class="nudge">
+      <span class="nudge-dot"></span>
+      <span><strong>Slots filling this week</strong> — same-day available for most concerns</span>
+    </div>
+
+
+    <div class="form-card" id="form-wrap">
+      <div id="form-content">
+
+        <div class="form-top">
+          <div class="form-top-inner">
+            <div class="form-title">Book Your Consultation</div>
+            <div class="form-subtitle">We will reach out to confirm your slot</div>
+            <!-- PRICE — only once on this entire page -->
+            <div class="price-row">
+              <span class="price-orig">₹700</span>
+              <span class="price-curr">₹399</span>
+              <span class="price-save">No payment now</span>
+            </div>
+            <div class="price-note">Full examination included · Pay at clinic on the day</div>
+          </div>
+        </div>
+
+        <div class="form-body">
+
+          <div class="recent-proof">
+            <span class="recent-icon">🟢</span>
+            <span>Someone in Electronic City booked a consultation today</span>
+          </div>
+
+          <div class="proof-bar">
+            <div class="pb-avs">
+              <div class="pb-av">P</div>
+              <div class="pb-av">R</div>
+              <div class="pb-av">S</div>
+            </div>
+            <span>126 patients trust Dr. Anindita · Rated 5★ on Google</span>
+          </div>
+
+          <form onsubmit="handleSubmit(event)">
+            <div class="fg">
+              <label for="name">Your full name *</label>
+              <input type="text" id="name" placeholder="e.g. Rahul Sharma" required autocomplete="name">
+            </div>
+            <div class="fg">
+              <label for="phone">Phone number *</label>
+              <input type="tel" id="phone" placeholder="10-digit mobile number" required pattern="[6-9][0-9]{9}" autocomplete="tel">
+            </div>
+            <div class="fg">
+              <label for="reason">What brings you in?</label>
+              <textarea id="reason" placeholder="e.g. Toothache, cleaning, checkup, sensitivity..."></textarea>
+            </div>
+            <div class="fg">
+              <label for="timing">When works for you?</label>
+              <select id="timing">
+                <option value="">Any time works for me</option>
+                <option value="Morning 9am–12pm">Morning · 9am to 12pm</option>
+                <option value="Afternoon 12pm–4pm">Afternoon · 12pm to 4pm</option>
+                <option value="Evening 4pm–8pm">Evening · 4pm to 8pm</option>
+              </select>
+            </div>
+            <button type="submit" class="submit-btn" id="submit-btn">
+              <span>Get a Callback</span>
+              <span class="btn-arrow">→</span>
+            </button>
+            <div class="form-note">
+              Free · No commitment · We call within the day
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="success-state" id="success-state">
+        <div class="s-icon">✅</div>
+        <div class="s-title">You're all set!</div>
+        <div class="s-sub">Dr. Anindita's team will reach out shortly to confirm your appointment. See you soon! 😊</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="hero-right">
+    <div class="deco d1"></div>
+    <div class="deco d2"></div>
+    <div class="doc-wrap">
+      <!-- Replace: <img src="doctor.jpg" alt="Dr. Anindita — Dentist in Electronic City Bangalore" class="doc-img"> -->
+      <div class="doc-placeholder">
+        <span class="ph-icon">👩‍⚕️</span>
+        <span>Add Dr. Anindita's photo here</span>
+      </div>
+    </div>
+    <div class="info-cards">
+      <div class="ic">
+        <div class="ic-ico">⭐</div>
+        <div>
+          <div class="ic-lbl">Google rating</div>
+          <div class="ic-val">5.0 · 126 reviews</div>
+        </div>
+      </div>
+      <div class="ic">
+        <div class="ic-ico">📍</div>
+        <div>
+          <div class="ic-lbl">Location</div>
+          <div class="ic-val">Electronic City, Bangalore</div>
+        </div>
+      </div>
+      <div class="ic">
+        <div class="ic-ico">⏰</div>
+        <div>
+          <div class="ic-lbl">Open</div>
+          <div class="ic-val">Mon – Sat · 9am to 8pm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF STRIP -->
+<div class="proof-strip">
+  <div class="pi"><div class="pn">126+</div><div class="pl">Happy patients</div></div>
+  <div class="pdiv"></div>
+  <div class="pi"><div class="pn">5★</div><div class="pl">Google rating</div></div>
+  <div class="pdiv"></div>
+  <div class="pi"><div class="pn">Same day</div><div class="pl">Appointments available</div></div>
+  <div class="pdiv"></div>
+  <div class="pi"><div class="pn">Zero</div><div class="pl">Hidden costs</div></div>
+</div>
+
+<!-- PAIN POINTS — gentle and empathetic -->
+<section class="pain-section">
+  <div class="pain-inner">
+    <div class="pain-label">Sound familiar?</div>
+    <h2 class="pain-title">Why do we keep putting it off?</h2>
+    <p class="pain-sub">You are not alone. Almost everyone delays dental visits — for the same reasons. Dr. Anindita has heard them all and designed her clinic around them.</p>
+
+    <div class="pain-grid">
+      <div class="pc">
+        <div class="pc-icon">😬</div>
+        <div class="pc-title">"It will be painful"</div>
+        <div class="pc-text">Modern dental care is far gentler than most people expect. Dr. Anindita's patients consistently say they were surprised.</div>
+      </div>
+      <div class="pc">
+        <div class="pc-icon">💸</div>
+        <div class="pc-title">"I don't know what it will cost"</div>
+        <div class="pc-text">Dr. Anindita explains costs before starting anything. No surprises. You decide what to do with full information.</div>
+      </div>
+      <div class="pc">
+        <div class="pc-icon">⏰</div>
+        <div class="pc-title">"I'll go next month"</div>
+        <div class="pc-text">A small issue today is much simpler to treat than the same issue six months from now. Same day slots are available.</div>
+      </div>
+    </div>
+
+    <div class="solution-bridge">
+      <div class="sb-icon">🦷</div>
+      <div class="sb-text">
+        <strong>The consultation is the easy first step.</strong> Just come in, let Dr. Anindita take a look, and you will know exactly where you stand — with zero obligation to proceed with anything.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REASSURANCE -->
+<section class="reassure-section">
+  <div class="section-lbl">What to expect</div>
+  <h2 class="section-ttl">A dental visit that feels different</h2>
+  <p class="section-sub">126 patients in Electronic City have trusted Dr. Anindita. Here is what they keep saying about the experience.</p>
+  <div class="reassure-grid">
+    <div class="rcard">
+      <div class="ri">😌</div>
+      <div class="rt2">Genuinely Painless</div>
+      <div class="rd2">Modern anaesthesia and a calm, gentle approach. Most patients are surprised at how comfortable it is.</div>
+    </div>
+    <div class="rcard">
+      <div class="ri">💬</div>
+      <div class="rt2">Zero Pressure</div>
+      <div class="rd2">Dr. Anindita explains what she finds and gives you options. You decide. There is no upselling, ever.</div>
+    </div>
+    <div class="rcard">
+      <div class="ri">💰</div>
+      <div class="rt2">Costs Explained First</div>
+      <div class="rd2">Full treatment cost is shared before anything begins. No surprises at the end of your visit.</div>
+    </div>
+    <div class="rcard">
+      <div class="ri">⚡</div>
+      <div class="rt2">Same Day Available</div>
+      <div class="rd2">Toothaches do not wait for a 3-week appointment. Same-day slots open most days of the week.</div>
+    </div>
+    <div class="rcard">
+      <div class="ri">👨‍👩‍👧</div>
+      <div class="rt2">Whole Family Welcome</div>
+      <div class="rd2">Children, adults, seniors — treated with the same patience. Especially good with anxious patients.</div>
+    </div>
+    <div class="rcard">
+      <div class="ri">🔬</div>
+      <div class="rt2">Modern Clinic</div>
+      <div class="rd2">Up-to-date equipment in Electronic City for faster, more accurate treatment and results that last.</div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section" itemscope itemtype="https://schema.org/LocalBusiness">
+  <meta itemprop="name" content="Dr. Anindita's Dentalyst Dental Studio">
+  <div class="section-lbl">Real patients · Real words</div>
+  <h2 class="section-ttl">What people are saying</h2>
+  <div class="reviews-grid">
+    <div class="rc" itemscope itemtype="https://schema.org/Review">
+      <div class="stars" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+        <meta itemprop="ratingValue" content="5">★★★★★
+      </div>
+      <p class="rv-text" itemprop="reviewBody">Had been avoiding the dentist for two years out of anxiety. Dr. Anindita was so patient and the treatment was completely painless. Wish I had come sooner.</p>
+      <div class="rv-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+        <div class="rv-av">P</div>
+        <div>
+          <div class="rv-name" itemprop="name">Priya M.</div>
+          <div class="rv-detail">Electronic City · Cavity treatment</div>
+        </div>
+      </div>
+    </div>
+    <div class="rc" itemscope itemtype="https://schema.org/Review">
+      <div class="stars" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+        <meta itemprop="ratingValue" content="5">★★★★★
+      </div>
+      <p class="rv-text" itemprop="reviewBody">She explained everything clearly before starting. Costs were exactly as quoted — no surprises. Root canal done in one visit with zero pain.</p>
+      <div class="rv-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+        <div class="rv-av">R</div>
+        <div>
+          <div class="rv-name" itemprop="name">Rahul K.</div>
+          <div class="rv-detail">HSR Layout · Root canal</div>
+        </div>
+      </div>
+    </div>
+    <div class="rc" itemscope itemtype="https://schema.org/Review">
+      <div class="stars" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+        <meta itemprop="ratingValue" content="5">★★★★★
+      </div>
+      <p class="rv-text" itemprop="reviewBody">Brought my 7-year-old who was terrified of dentists. Dr. Anindita was incredibly gentle and my daughter actually wants to go back next time!</p>
+      <div class="rv-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+        <div class="rv-av">S</div>
+        <div>
+          <div class="rv-name" itemprop="name">Sneha R.</div>
+          <div class="rv-detail">Bommanahalli · Children's dentistry</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google Reviews link — dynamic via CLINIC config -->
+  <div style="text-align:center;margin-top:28px;">
+    <a href="#" class="google-reviews-link" target="_blank"
+       style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--teal);text-decoration:none;border:1.5px solid rgba(26,107,107,0.2);padding:10px 20px;border-radius:100px;transition:all 0.2s;">
+      ⭐ See all <span class="review-count-plain">126</span> reviews on Google →
+    </a>
+  </div>
+</section>
+
+<!-- MAP — src set dynamically from CLINIC.GOOGLE_MAPS_EMBED -->
+<section class="map-section">
+  <div class="map-inner">
+    <div class="section-lbl" style="text-align:left;margin-bottom:10px;">Find us</div>
+    <h2 class="section-ttl" style="text-align:left;margin-bottom:20px;">
+      <span class="clinic-name">Dr. Anindita's Dentalyst Dental Studio</span>
+    </h2>
+    <div class="map-wrap">
+      <iframe
+        id="clinic-map"
+        src=""
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+      <div class="map-footer">
+        <div class="map-address">
+          📍 <span class="clinic-area-city">Electronic City, Bangalore</span>
+          &nbsp;·&nbsp;
+          <span class="clinic-hours">Mon – Sat · 9am to 8pm</span>
+        </div>
+        <div class="map-links">
+          <a href="#" class="map-link directions-link" target="_blank">
+            🗺 Get directions
+          </a>
+          <a href="#" class="map-link google-reviews-link" target="_blank">
+            ⭐ <span class="review-count-plain">126</span> reviews
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq-section">
+  <div class="section-lbl">Common questions</div>
+  <h2 class="section-ttl">Everything you need to know</h2>
+  <div class="faq-wrap">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What does the consultation include?
+        <span class="faq-chev">▼</span>
+      </button>
+      <div class="faq-ans">A complete dental examination — Dr. Anindita checks all your teeth, gums, and mouth. She explains exactly what she finds, gives you treatment options, and shares the costs. No obligation to proceed with anything on the day.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Will the treatment be painful?
+        <span class="faq-chev">▼</span>
+      </button>
+      <div class="faq-ans">Dr. Anindita uses modern anaesthesia and gentle techniques. Patients who were anxious beforehand consistently say they were surprised at how comfortable it was. Being nervous is completely normal — she is very used to it.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Do I pay anything now to book?
+        <span class="faq-chev">▼</span>
+      </button>
+      <div class="faq-ans">No payment now. Just fill in the form and Dr. Anindita's team will reach out to confirm your slot. The consultation fee is paid at the clinic on the day of your visit — nothing is charged online.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How quickly can I get an appointment?
+        <span class="faq-chev">▼</span>
+      </button>
+      <div class="faq-ans">Same-day appointments are available most days, especially for urgent concerns like toothaches. Once you submit the form, the team will reach out to confirm a slot that works for you.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Do you treat children and anxious patients?
+        <span class="faq-chev">▼</span>
+      </button>
+      <div class="faq-ans">Yes — Dr. Anindita is particularly good with children and patients who feel nervous or anxious about dental visits. She takes the time to make everyone comfortable before beginning any treatment.</div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="bottom-cta">
+  <h2 class="bc-ttl">Ready when you are</h2>
+  <p class="bc-sub">
+    No judgment. No pressure. Just a gentle, honest dental visit<br>
+    with a doctor who genuinely cares.
+  </p>
+  <a href="#form-wrap" class="cta-btn" onclick="scrollToForm(event)">
+    Get a Callback →
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fn clinic-name">Dr. Anindita's Dentalyst</div>
+  <div class="fi clinic-area-city">Electronic City, Bangalore</div>
+  <div class="fc">
+    <a href="#" class="directions-link" target="_blank">📍 Get directions</a>
+  </div>
+</footer>
+
+<script>
+function scrollToForm(e) {
+  e.preventDefault();
+  document.getElementById('form-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => document.getElementById('name').focus(), 600);
+}
+
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.innerHTML = '<span>Booking...</span>';
+  btn.disabled = true;
+  btn.style.opacity = '0.75';
+
+  const data = {
+    name:      document.getElementById('name').value.trim(),
+    phone:     document.getElementById('phone').value.trim(),
+    reason:    document.getElementById('reason').value.trim(),
+    timing:    document.getElementById('timing').value,
+    timestamp: new Date().toLocaleString('en-IN'),
+    source:    'Landing Page'
+  };
+
+  const SCRIPT_URL = CLINIC.APPS_SCRIPT_URL;
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } catch(err) { console.log('Submitted'); }
+
+  document.getElementById('form-content').style.display = 'none';
+  document.getElementById('success-state').style.display = 'flex';
+}
+</script>
+</body>
+</html>
